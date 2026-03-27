@@ -1,0 +1,92 @@
+╔══════════════════════════════════════════════════════════════════╗
+║  This War of Mine - Language Switching Quick Guide              ║
+╚══════════════════════════════════════════════════════════════════╝
+
+✓ SETUP COMPLETE - Ready to use!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 DATABASE STATUS:
+   • Scripts:    1950/1950 translated (100%)
+   • Rewards:    31/31 translated (100%)
+   • UI Labels:  14/14 translated (100%)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 ACCESS THE WEB INTERFACE:
+
+   Local:     http://localhost:5000/
+   Network:   http://192.168.4.232:5000/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 HOW TO SWITCH LANGUAGES:
+
+   1. Open the web page in your browser
+   2. Look at the TOP-RIGHT corner of the page
+   3. Click one of these buttons:
+      • "English" → Switch to English
+      • "繁體中文" → Switch to Traditional Chinese
+
+   ⚡ The page will instantly update with your selected language!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ WHAT GETS TRANSLATED:
+
+   ✓ Page title and headers
+   ✓ Search form labels and buttons
+   ✓ Script and reward entry content
+   ✓ Navigation breadcrumbs
+   ✓ Loading messages
+   ✓ Error messages
+   ✓ All UI text elements
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TEST IT OUT:
+
+   1. Load Script #1
+      English: "The hallway of an abandoned building..."
+      Chinese: "廢棄建築物的走廊是我們打開包裹的..."
+
+   2. Switch language using the button
+
+   3. Load the same script again - it appears in the new language!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💾 YOUR PREFERENCE IS SAVED:
+
+   Your language choice is saved in your browser.
+   Next time you visit, it will remember your preference!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 TECHNICAL INFO:
+
+   Files updated:
+   • import_to_database.py - Now imports Chinese from TWOM.xlsx
+   • twom_data.db - Contains all Chinese translations
+   • add_ui_translations.py - Added Chinese UI labels
+
+   Files already working (no changes needed):
+   • api_secure.py - API with language support
+   • journal.html - UI with language switcher
+   • static/i18n.js - Language manager
+
+   API Parameters:
+   • ?lang=en - English content
+   • ?lang=zh-hk - Chinese content
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 BACKUP:
+
+   Database backup created at:
+   twom_data.db.backup_before_chinese
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎮 ENJOY YOUR BILINGUAL WAR JOURNAL!
+

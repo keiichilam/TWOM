@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWOM Database API Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .error {
+            background: #ffe0e0;
+            border-left-color: #ff4444;
+            color: #cc0000;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-style: italic;
+        }
+
+        .content-display {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .row-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TWOM Database API Test Interface</h1>
+
+        <!-- Statistics Panel -->
+        <div class="panel">
+            <h2>Database Statistics</h2>
+            <button onclick="loadStats()">Load Statistics</button>
+            <div id="statsResult"></div>
+        </div>
+
+        <!-- Get Script by Row -->
+        <div class="panel">
+            <h2>Get Script by Row Number</h2>
+            <div class="input-group">
+                <input type="number" id="scriptRow" placeholder="Enter row number (1-1950)" min="1" max="1950" value="1">
+                <button onclick="getScript()">Get Script</button>
+            </div>
+            <div id="scriptResult"></div>
+        </div>
+
+        <!-- Get Reward by Row -->
+        <div class="panel">
+            <h2>Get Reward by Row Number</h2>
+            <div class="input-group">
+                <input type="number" id="rewardRow" placeholder="Enter row number (1-31)" min="1" max="31" value="1">
+                <button onclick="getReward()">Get Reward</button>
+            </div>
+            <div id="rewardResult"></div>
+        </div>
+
+        <!-- Get Lookup by Row -->
+        <div class="panel">
+            <h2>Get Lookup by Row Number</h2>
+            <div class="input-group">
+                <input type="number" id="lookupRow" placeholder="Enter row number" min="1" value="2">
+                <button onclick="getLookup()">Get Lookup</button>
+            </div>
+            <div id="lookupResult"></div>
+        </div>
+
+        <!-- Search Scripts -->
+        <div class="panel">
+            <h2>Search Scripts</h2>
+            <div class="input-group">
+                <input type="text" id="searchQuery" placeholder="Enter search query">
+                <button onclick="searchScripts()">Search</button>
+            </div>
+            <div id="searchResult"></div>
+        </div>
+
+        <!-- Search Rewards -->
+        <div class="panel">
+            <h2>Search Rewards</h2>
+            <div class="input-group">
+                <input type="text" id="searchRewardQuery" placeholder="Enter search query">
+                <button onclick="searchRewards()">Search</button>
+            </div>
+            <div id="searchRewardResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+
+        // Load statistics
+        async function loadStats() {
+            const resultDiv = document.getElementById('statsResult');
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/stats`);
+                const data = await response.json();
+
+                resultDiv.innerHTML = `
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3>Lookup Records</h3>
+                            <div class="number">${data.lookup_count}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Rewards</h3>
+                            <div class="number">${data.rewards_count}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Scripts</h3>
+                            <div class="number">${data.scripts_count}</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Get script by row number
+        async function getScript() {
+            const rowNumber = document.getElementById('scriptRow').value;
+            const resultDiv = document.getElementById('scriptResult');
+
+            if (!rowNumber) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a row number</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/scripts/${rowNumber}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="result error">${data.error}</div>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <div class="row-number">Row #${data.row_number}</div>
+                            <div class="content-display">${escapeHtml(data.content)}</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Get reward by row number
+        async function getReward() {
+            const rowNumber = document.getElementById('rewardRow').value;
+            const resultDiv = document.getElementById('rewardResult');
+
+            if (!rowNumber) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a row number</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/rewards/${rowNumber}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="result error">${data.error}</div>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <div class="row-number">Row #${data.row_number}</div>
+                            <div class="content-display">${escapeHtml(data.content)}</div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Get lookup by row number
+        async function getLookup() {
+            const rowNumber = document.getElementById('lookupRow').value;
+            const resultDiv = document.getElementById('lookupResult');
+
+            if (!rowNumber) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a row number</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/lookup/${rowNumber}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="result error">${data.error}</div>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <div class="row-number">Row #${data.row_number}</div>
+                            <div class="content-display">
+                                <strong>Reward #:</strong> ${data.reward_num}<br>
+                                <strong>Reward Result:</strong> ${escapeHtml(data.reward_result)}<br><br>
+                                <strong>Script #:</strong> ${data.script_num}<br>
+                                <strong>Script Result:</strong> ${escapeHtml(data.script_result)}
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Search scripts
+        async function searchScripts() {
+            const query = document.getElementById('searchQuery').value;
+            const resultDiv = document.getElementById('searchResult');
+
+            if (!query) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a search query</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/search/scripts?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="result error">${data.error}</div>`;
+                } else if (data.total === 0) {
+                    resultDiv.innerHTML = `<div class="result">No results found for "${query}"</div>`;
+                } else {
+                    let html = `<div class="result">
+                        <div class="row-number">Found ${data.total} results (showing page ${data.page} of ${data.total_pages})</div>
+                    `;
+
+                    data.data.forEach(script => {
+                        const preview = script.content.substring(0, 200);
+                        html += `
+                            <div class="content-display" style="margin-top: 10px;">
+                                <strong>Row #${script.row_number}:</strong><br>
+                                ${escapeHtml(preview)}${script.content.length > 200 ? '...' : ''}
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    resultDiv.innerHTML = html;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Search rewards
+        async function searchRewards() {
+            const query = document.getElementById('searchRewardQuery').value;
+            const resultDiv = document.getElementById('searchRewardResult');
+
+            if (!query) {
+                resultDiv.innerHTML = '<div class="result error">Please enter a search query</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/search/rewards?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.innerHTML = `<div class="result error">${data.error}</div>`;
+                } else if (data.total === 0) {
+                    resultDiv.innerHTML = `<div class="result">No results found for "${query}"</div>`;
+                } else {
+                    let html = `<div class="result">
+                        <div class="row-number">Found ${data.total} results</div>
+                    `;
+
+                    data.data.forEach(reward => {
+                        const preview = reward.content.substring(0, 200);
+                        html += `
+                            <div class="content-display" style="margin-top: 10px;">
+                                <strong>Row #${reward.row_number}:</strong><br>
+                                ${escapeHtml(preview)}${reward.content.length > 200 ? '...' : ''}
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    resultDiv.innerHTML = html;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load stats on page load
+        window.onload = function() {
+            loadStats();
+        };
+    </script>
+</body>
+</html>

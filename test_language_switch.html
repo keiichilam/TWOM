@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switch Test</title>
+</head>
+<body>
+    <h1>Language Switch Test</h1>
+
+    <button id="btn-en">Switch to English</button>
+    <button id="btn-zh">Switch to Chinese</button>
+
+    <div id="status"></div>
+    <pre id="output"></pre>
+
+    <script src="/static/i18n.js"></script>
+    <script>
+        const status = document.getElementById('status');
+        const output = document.getElementById('output');
+
+        const langManager = new LanguageManager();
+
+        async function init() {
+            status.textContent = 'Initializing...';
+            try {
+                await langManager.initialize();
+                status.textContent = 'Ready - Current lang: ' + langManager.getCurrentLang();
+                output.textContent = JSON.stringify(langManager.labels, null, 2);
+            } catch (error) {
+                status.textContent = 'Init error: ' + error.message;
+                console.error(error);
+            }
+        }
+
+        document.getElementById('btn-en').addEventListener('click', async () => {
+            status.textContent = 'Switching to English...';
+            try {
+                await langManager.setLanguage('en');
+                status.textContent = 'Success - Current lang: ' + langManager.getCurrentLang();
+                output.textContent = JSON.stringify(langManager.labels, null, 2);
+            } catch (error) {
+                status.textContent = 'Error: ' + error.message;
+                console.error(error);
+            }
+        });
+
+        document.getElementById('btn-zh').addEventListener('click', async () => {
+            status.textContent = 'Switching to Chinese...';
+            try {
+                await langManager.setLanguage('zh-hk');
+                status.textContent = 'Success - Current lang: ' + langManager.getCurrentLang();
+                output.textContent = JSON.stringify(langManager.labels, null, 2);
+            } catch (error) {
+                status.textContent = 'Error: ' + error.message;
+                console.error(error);
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
