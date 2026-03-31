@@ -24,3 +24,8 @@ Thumbs.db
 *.backup
 *.old
 *.before-*
+
+# Sensitive operational files
+SERVER_INFO.md
+QUICK_ACCESS.txt
+SECURITY_SUMMARY.txt
